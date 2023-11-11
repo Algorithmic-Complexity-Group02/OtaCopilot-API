@@ -56,8 +56,10 @@ def create_graph(df_animes, df_usuarios):
 
 
 
-df_animes = pd.read_csv(urlAnimeTest, nrows=300)
-df_usuarios = pd.read_csv(urlProfileTest, nrows=300)
+df_animes = pd.read_csv(urlAnimeTest, nrows=1500)
+print(df_animes.columns)
+
+df_usuarios = pd.read_csv(urlProfileTest, nrows=1500)
 
 G_nx, node_id_mapping = create_graph(df_animes, df_usuarios)
 
@@ -124,5 +126,5 @@ recommended_animes = get_recommended_animes(source_anime_title)
 print(f"Animes recomendados para '{source_anime_title}':")
 for anime_uid, distance in recommended_animes:
     anime_data = G_nx.nodes[anime_uid]['data']
-    print(f"Anime: {anime_data['title']}, Distancia: {distance}")
+    print(f"Anime: {anime_data}, Distancia: {distance}")
 
