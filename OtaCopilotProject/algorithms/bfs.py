@@ -1,11 +1,14 @@
 import pandas as pd
 import networkx as nx
 from collections import deque
-import numpy as np
-from ufds import DSU
+from .ufds import DSU
 
-urlProfileTest = "../static/profileTest.csv"
-urlAnimeTest = "../static/animeTest.csv"
+import numpy as np
+
+
+
+urlProfileTest = "./OtaCopilotProject/static/profileTest.csv"
+urlAnimeTest = "./OtaCopilotProject/static/animeTest.csv"
 
 def create_graph(df_animes, df_usuarios):
     nodos = {}

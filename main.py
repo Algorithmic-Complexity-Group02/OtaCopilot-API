@@ -1,7 +1,10 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, Depends, Response, status, HTTPException, Cookie
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+import uvicorn 
 import pandas as pd
 import numpy as np
+from OtaCopilotProject.algorithms.bfs import *
+from typing import List
 
 app = FastAPI(
     title="OtaCopilot API",
@@ -14,6 +17,18 @@ app = FastAPI(
 async def root():
     return FileResponse("./templates/index.html")
 
+# Ruta para obtener recomendaciones de animes
+@app.get("/api/v1/recommendations/{anime_name}", response_model=List[str])
+async def get_recommendations(anime_name: str):
+    recommended_animes = get_recommended_animes(anime_name)
+
+    # Obtener los títulos de los animes recomendados
+    recommendations_titles = []
+    for anime_uid, _ in recommended_animes:
+        anime_data = G_nx.nodes[anime_uid]['data']
+        recommendations_titles.append(anime_data['title'])
+
+    return recommendations_titles[:20]
 
 @app.get("/api/v1/animes")
 async def get_animes():
