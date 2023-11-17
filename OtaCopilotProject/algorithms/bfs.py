@@ -118,9 +118,15 @@ def recommend_animes_bfs(graph, source_anime_title, node_id_mapping):
                     print(f"Atributo 'tipo' no encontrado para el nodo {neighbor}")
     recommended_animes.sort(key=lambda x: x[1])
     return recommended_animes
+
 def get_recommended_animes(anime_title):
     recommended_animes = recommend_animes_bfs(G_nx, anime_title, node_id_mapping)
     return recommended_animes
+
+def get_anime_data_by_id(anime_id):
+    # Lógica para obtener los datos del anime por su ID
+    anime_data = G_nx.nodes[anime_id]['data']
+    return anime_data
 
 
 source_anime_title = "Haikyuu!! Second Season"
@@ -130,4 +136,5 @@ print(f"Animes recomendados para '{source_anime_title}':")
 for anime_uid, distance in recommended_animes:
     anime_data = G_nx.nodes[anime_uid]['data']
     print(f"Anime: {anime_data}, Distancia: {distance}")
-
+    
+    

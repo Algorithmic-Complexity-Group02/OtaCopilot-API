@@ -17,18 +17,16 @@ app = FastAPI(
 async def root():
     return FileResponse("./templates/index.html")
 
-# Ruta para obtener recomendaciones de animes
-@app.get("/api/v1/recommendations/{anime_name}", response_model=List[str])
+@app.get("/api/v1/recommendations/{anime_name}", response_model=List[dict])
 async def get_recommendations(anime_name: str):
-    recommended_animes = get_recommended_animes(anime_name)
+    recommended_anime_ids = get_recommended_animes(anime_name)
+    recommended_animes_data = []
 
-    # Obtener los títulos de los animes recomendados
-    recommendations_titles = []
-    for anime_uid, _ in recommended_animes:
-        anime_data = G_nx.nodes[anime_uid]['data']
-        recommendations_titles.append(anime_data['title'])
+    for anime_id in recommended_anime_ids:
+        anime_data = get_anime_data_by_id(anime_id)  # Obtiene los datos del anime por su ID
+        recommended_animes_data.append(anime_data)
 
-    return recommendations_titles[:20]
+    return recommended_animes_data[:20]  # Retorna los datos de los primeros 20 animes recomendados en formato JSON
 
 @app.get("/api/v1/animes")
 async def get_animes():
