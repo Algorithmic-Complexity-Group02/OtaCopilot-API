@@ -9,11 +9,9 @@ app = FastAPI(
     version="0.1.0",
 )
 
-
 @app.get("/")
 async def root():
     return FileResponse("./templates/index.html")
-
 
 @app.get("/api/v1/animes")
 async def get_animes():
