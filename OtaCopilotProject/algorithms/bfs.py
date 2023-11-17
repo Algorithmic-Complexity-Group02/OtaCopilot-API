@@ -123,11 +123,12 @@ def get_recommended_animes(anime_title):
     recommended_animes = recommend_animes_bfs(G_nx, anime_title, node_id_mapping)
     return recommended_animes
 
-def get_anime_data_by_id(anime_id):
-    # Lógica para obtener los datos del anime por su ID
-    anime_data = G_nx.nodes[anime_id]['data']
-    return anime_data
-
+def handle_float_values(data):
+    for key, value in data.items():
+        if isinstance(value, float):
+            if value == float('inf') or value == float('-inf') or value != value:
+                data[key] = None  # Reemplazar infinitos y NaN por None
+    return data
 
 source_anime_title = "Haikyuu!! Second Season"
 recommended_animes = get_recommended_animes(source_anime_title)

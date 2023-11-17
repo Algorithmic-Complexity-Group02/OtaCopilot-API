@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from OtaCopilotProject.algorithms.bfs import *
 from typing import List
+import json
 
 app = FastAPI(
     title="OtaCopilot API",
@@ -16,17 +17,6 @@ app = FastAPI(
 @app.get("/")
 async def root():
     return FileResponse("./templates/index.html")
-
-@app.get("/api/v1/recommendations/{anime_name}", response_model=List[dict])
-async def get_recommendations(anime_name: str):
-    recommended_anime_ids = get_recommended_animes(anime_name)
-    recommended_animes_data = []
-
-    for anime_id in recommended_anime_ids:
-        anime_data = get_anime_data_by_id(anime_id)  # Obtiene los datos del anime por su ID
-        recommended_animes_data.append(anime_data)
-
-    return recommended_animes_data[:20]  # Retorna los datos de los primeros 20 animes recomendados en formato JSON
 
 @app.get("/api/v1/animes")
 async def get_animes():
@@ -40,13 +30,25 @@ async def get_users():
     df = pd.read_csv("OtaCopilotProject/static/profileTest.csv").T.to_dict()
     return df
 
-
 @app.get("/api/v1/animes/{anime_name}")
 async def get_anime_by_name(anime_name: str):
     df = pd.read_csv("OtaCopilotProject/static/animeTest.csv")
-    df = df[df["name"] == anime_name]
+    df = df[df["title"] == anime_name]
 
     if df.empty:
         raise HTTPException(status_code=404, detail="Anime not found")
 
-    return df.iloc[0].to_dict()
+    anime_data = df.iloc[0].to_dict()
+
+    recommended_anime_ids = get_recommended_animes(anime_name)
+    recommended_animes_data = []
+
+    for anime_uid, _ in recommended_anime_ids[:19]:
+        anime_data = G_nx.nodes[anime_uid]['data']
+        anime_dict = anime_data.to_dict()
+
+        anime_dict = handle_float_values(anime_dict)  # Manejar valores de punto flotante problemáticos
+
+        recommended_animes_data.append(anime_dict)
+
+    return {"anime_data": anime_data, "recommended_animes": recommended_animes_data}
