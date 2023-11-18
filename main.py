@@ -41,14 +41,18 @@ async def get_anime_by_name(anime_name: str):
     anime_data = df.iloc[0].to_dict()
 
     recommended_anime_ids = get_recommended_animes(anime_name)
+    #print(recommended_anime_ids)
+    
     recommended_animes_data = []
 
     for anime_uid, _ in recommended_anime_ids[:19]:
         anime_data = G_nx.nodes[anime_uid]['data']
+       # print(anime_data)
         anime_dict = anime_data.to_dict()
-
+       # print(anime_dict)
+        
         anime_dict = handle_float_values(anime_dict)  # Manejar valores de punto flotante problemáticos
 
         recommended_animes_data.append(anime_dict)
 
-    return {"anime_data": anime_data, "recommended_animes": recommended_animes_data}
+    return {"recommended_animes": recommended_animes_data}
