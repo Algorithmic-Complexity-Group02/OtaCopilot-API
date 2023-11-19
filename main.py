@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Depends, Response, status, HTTPException, Cookie
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn 
 import pandas as pd
 import numpy as np
@@ -13,6 +14,18 @@ app = FastAPI(
     version="0.1.0",
 )
 
+origins = [
+    "http://localhost",
+    "http://localhost:4200",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
