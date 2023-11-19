@@ -58,7 +58,6 @@ def create_graph(df_animes, df_usuarios):
     return G_nx, node_id_mapping
 
 
-
 df_animes = pd.read_csv(urlAnimeTest, nrows=1500)
 print(df_animes.columns)
 

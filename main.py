@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request, Depends, Response, status, HTTPException, Cookie
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn 
 import pandas as pd
 import numpy as np
 from OtaCopilotProject.algorithms.bfs import *

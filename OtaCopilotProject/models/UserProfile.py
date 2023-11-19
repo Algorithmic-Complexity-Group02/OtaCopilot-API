@@ -1,5 +1,3 @@
-
-
 class UserProfile:
     def __init__(self, profile, gender, birthday, favorites_anime, link):
         self.profile = profile
