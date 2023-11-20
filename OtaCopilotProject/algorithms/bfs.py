@@ -1,11 +1,14 @@
 import pandas as pd
 import networkx as nx
 from collections import deque
-import numpy as np
-from ufds import DSU
+from .ufds import DSU
 
-urlProfileTest = "../static/profileTest.csv"
-urlAnimeTest = "../static/animeTest.csv"
+import numpy as np
+
+#TERRIBLE
+
+urlProfileTest = "./OtaCopilotProject/static/profileTest.csv"
+urlAnimeTest = "./OtaCopilotProject/static/animeTest.csv"
 
 def create_graph(df_animes, df_usuarios):
     nodos = {}
@@ -55,9 +58,10 @@ def create_graph(df_animes, df_usuarios):
     return G_nx, node_id_mapping
 
 
+df_animes = pd.read_csv(urlAnimeTest, nrows=1500)
+print(df_animes.columns)
 
-df_animes = pd.read_csv(urlAnimeTest, nrows=300)
-df_usuarios = pd.read_csv(urlProfileTest, nrows=300)
+df_usuarios = pd.read_csv(urlProfileTest, nrows=1500)
 
 G_nx, node_id_mapping = create_graph(df_animes, df_usuarios)
 
@@ -105,7 +109,7 @@ def recommend_animes_bfs(graph, source_anime_title, node_id_mapping):
                             if anime_node not in visited:
                                 visited.add(anime_node)
                                 queue.append((anime_node, distance + 1))
-                                recommended_animes.append((anime_node, distance + 1))
+                               # recommended_animes.append((anime_node, distance + 1))
 
                     elif node_data["tipo"] == "anime":
                         recommended_animes.append((neighbor, distance + 1))
@@ -113,16 +117,31 @@ def recommend_animes_bfs(graph, source_anime_title, node_id_mapping):
                     print(f"Atributo 'tipo' no encontrado para el nodo {neighbor}")
     recommended_animes.sort(key=lambda x: x[1])
     return recommended_animes
+
 def get_recommended_animes(anime_title):
     recommended_animes = recommend_animes_bfs(G_nx, anime_title, node_id_mapping)
+    print_animes(anime_title, recommended_animes)
     return recommended_animes
+
+def handle_float_values(data):
+    for key, value in data.items():
+        if isinstance(value, float):
+            if value == float('inf') or value == float('-inf') or value != value:
+                data[key] = None  # Reemplazar infinitos y NaN por None
+    return data
+
+def print_animes(title, recommended_animes):
+    print(f"Animes recomendados para '{title}':")
+    for anime_uid, distance in recommended_animes:
+        anime_data = G_nx.nodes[anime_uid]['data']
+        print(f"Anime: {anime_data}, Distancia: {distance}")
 
 
 source_anime_title = "Haikyuu!! Second Season"
 recommended_animes = get_recommended_animes(source_anime_title)
 
-print(f"Animes recomendados para '{source_anime_title}':")
+'''print(f"Animes recomendados para '{source_anime_title}':")
 for anime_uid, distance in recommended_animes:
     anime_data = G_nx.nodes[anime_uid]['data']
-    print(f"Anime: {anime_data['title']}, Distancia: {distance}")
-
+    print(f"Anime: {anime_data}, Distancia: {distance}")'''
+    

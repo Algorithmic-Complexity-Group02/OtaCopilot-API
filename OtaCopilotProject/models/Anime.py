@@ -1,5 +1,3 @@
-
-
 class Anime:
 
     def __init__(self, uid, title, genre, aired, episodes, members, popularity, ranked, score, img_url, link):
