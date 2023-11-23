@@ -137,11 +137,11 @@ def print_animes(title, recommended_animes):
         print(f"Anime: {anime_data}, Distancia: {distance}")
 
 
-source_anime_title = "Haikyuu!! Second Season"
-recommended_animes = get_recommended_animes(source_anime_title)
+# source_anime_title = "Haikyuu!! Second Season"
+# recommended_animes = get_recommended_animes(source_anime_title)
 
-'''print(f"Animes recomendados para '{source_anime_title}':")
-for anime_uid, distance in recommended_animes:
-    anime_data = G_nx.nodes[anime_uid]['data']
-    print(f"Anime: {anime_data}, Distancia: {distance}")'''
+# '''print(f"Animes recomendados para '{source_anime_title}':")
+# for anime_uid, distance in recommended_animes:
+#     anime_data = G_nx.nodes[anime_uid]['data']
+#     print(f"Anime: {anime_data}, Distancia: {distance}")'''
     
