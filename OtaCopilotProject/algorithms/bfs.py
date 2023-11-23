@@ -6,9 +6,9 @@ from .ufds import DSU
 
 import numpy as np
 
-#TERRIBLE
 
 urlProfileTest = "./OtaCopilotProject/static/profileTest.csv"
+#urlProfileTest = "./OtaCopilotProject/static/profiles.csv"
 urlAnimeTest = "./OtaCopilotProject/static/animeTest.csv"
 
 def create_graph(df_animes, df_usuarios):
@@ -59,10 +59,10 @@ def create_graph(df_animes, df_usuarios):
     return G_nx, node_id_mapping
 
 
-df_animes = pd.read_csv(urlAnimeTest, nrows=1500)
+df_animes = pd.read_csv(urlAnimeTest, nrows=5000)
 print(df_animes.columns)
 
-df_usuarios = pd.read_csv(urlProfileTest, nrows=1500)
+df_usuarios = pd.read_csv(urlProfileTest, nrows=3100)
 
 G_nx, node_id_mapping = create_graph(df_animes, df_usuarios)
 
@@ -110,7 +110,7 @@ def recommend_animes_bfs(graph, source_anime_title, node_id_mapping):
                             if anime_node not in visited:
                                 visited.add(anime_node)
                                 queue.append((anime_node, distance + 1))
-                               # recommended_animes.append((anime_node, distance + 1))
+                                # recommended_animes.append((anime_node, distance + 1))
 
                     elif node_data["tipo"] == "anime":
                         recommended_animes.append((neighbor, distance + 1))
@@ -141,8 +141,8 @@ def print_animes(title, recommended_animes):
 # source_anime_title = "Haikyuu!! Second Season"
 # recommended_animes = get_recommended_animes(source_anime_title)
 
-# '''print(f"Animes recomendados para '{source_anime_title}':")
-# for anime_uid, distance in recommended_animes:
-#     anime_data = G_nx.nodes[anime_uid]['data']
-#     print(f"Anime: {anime_data}, Distancia: {distance}")'''
+'''print(f"Animes recomendados para '{source_anime_title}':")
+for anime_uid, distance in recommended_animes:
+    anime_data = G_nx.nodes[anime_uid]['data']
+    print(f"Anime: {anime_data}, Distancia: {distance}")'''
     
