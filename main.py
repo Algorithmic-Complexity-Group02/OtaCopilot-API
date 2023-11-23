@@ -6,6 +6,7 @@ import numpy as np
 from OtaCopilotProject.algorithms.bfs import *
 from typing import List
 import json
+from fastapi import Query
 
 app = FastAPI(
     title="OtaCopilot API",
@@ -68,3 +69,16 @@ async def get_anime_by_name(anime_name: str):
         recommended_animes_data.append(anime_dict)
 
     return {"recommended_animes": recommended_animes_data}
+
+@app.get("/api/v1/search/animes")
+async def search_animes_by_title(query: str = Query(..., title="Search Term")):
+    df = pd.read_csv("OtaCopilotProject/static/animeTest.csv")
+    
+    filtered_animes = df[df["title"].str.contains(query, case=False)]
+
+    if filtered_animes.empty:
+        raise HTTPException(status_code=404, detail="No animes found for the given search term")
+
+    # Convertir los datos de los animes filtrados a un formato JSON
+    filtered_animes_data = filtered_animes.to_dict(orient='records')
+    return {"search_results": filtered_animes_data}
