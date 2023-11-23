@@ -3,6 +3,7 @@ import networkx as nx
 from collections import deque
 from .ufds import DSU
 
+
 import numpy as np
 
 #TERRIBLE
